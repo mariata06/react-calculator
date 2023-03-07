@@ -2,19 +2,35 @@ import { useDrag } from 'react-dnd';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
-//Number Component
+//Number Component (draggable component)
 function Number({ text }) {
+  const [{ opacity }, dragRef] = useDrag({
+    type: 'number',
+    number: 'text',
+    collect: (monitor) => ({
+      opacity: monitor.isDragging() ? 0.5 : 1,
+    }),
+  });
+
   return (
-    <div className="number">
+    <div className="number" ref={dragRef} style={{ opacity }}>
       {text}
     </div>
   )
 }
 
-//Operator Component
+//Operator Component (draggable component)
 function Operator({ text }) {
+  const [{ opacity }, dragRef] = useDrag({
+    type: 'operator',
+    operator: 'text',
+    collect: (monitor) => ({
+      opacity: monitor.isDragging() ? 0.5 : 1,
+    }),
+  });
+
   return (
-    <div className="operator">
+    <div className="operator" ref={dragRef} style={{ opacity }}>
       {text}
     </div>
   )
