@@ -1,4 +1,6 @@
+import React, {useState} from 'react';
 import { useDrag } from 'react-dnd';
+import { useDrop } from 'react-dnd';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
@@ -6,11 +8,11 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 function Number({ text }) {
   const [{ opacity }, dragRef] = useDrag({
     type: 'number',
-    number: 'text',
+    item: () => ({text}),
     collect: (monitor) => ({
       opacity: monitor.isDragging() ? 0.5 : 1,
-    }),
-  });
+    })
+  })
 
   return (
     <div className="number" ref={dragRef} style={{ opacity }}>
@@ -23,16 +25,39 @@ function Number({ text }) {
 function Operator({ text }) {
   const [{ opacity }, dragRef] = useDrag({
     type: 'operator',
-    operator: 'text',
+    item: () => ({text}),
     collect: (monitor) => ({
       opacity: monitor.isDragging() ? 0.5 : 1,
-    }),
+    })
   });
 
   return (
     <div className="operator" ref={dragRef} style={{ opacity }}>
       {text}
     </div>
+  )
+}
+
+//Spot Component
+function Spot({ type }) {
+  const [{ canDrop, isOver }, dropRef] = useDrop({
+    accept: type,
+    drop: (item) => {
+      console.log(item);
+      console.log(type);
+    },
+    collect: (monitor) => ({
+      isOver: !!monitor.isOver(),
+      canDrop: monitor.canDrop()
+    })
+  });
+
+  let backgroundColor = '#f2f2f2';
+  if (canDrop) backgroundColor = '#eabbf0';
+  if (isOver) backgroundColor = '#ecd1f0';
+
+  return (
+    <div className='spot' ref={dropRef} style={{ backgroundColor }}>0</div>
   )
 }
 
@@ -43,10 +68,10 @@ function App() {
 
       <div className="App">
         <div className='calculator-display'>
-          <div className='spot'>1</div>
-          <div className='spot'>1</div>
-          <div className='spot'>+</div>
-          <div className='total'>2</div>
+          <Spot type='number'>1</Spot>
+          <Spot type='number'>3</Spot>
+          <Spot type='operator'>+</Spot>
+          <div className='total'>4</div>
         </div>
 
         <div className='calculator-buttons'>

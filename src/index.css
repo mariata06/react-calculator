@@ -19,6 +19,8 @@
   --large-screen-width: 1170px;
   --small-screen-width: 90vw;
   --fixed-width: 50rem;
+  --color-pink-1: #eabbf0;
+  --color-pink-2: #ecd1f0;
 }
 
 body {
