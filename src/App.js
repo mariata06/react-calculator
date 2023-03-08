@@ -21,31 +21,12 @@ function Button({ type, text }) {
   )
 }
 
-//Operator Component (draggable component)
-// function Operator({ text }) {
-//   const [{ opacity }, dragRef] = useDrag({
-//     type: 'operator',
-//     item: () => ({text}),
-//     collect: (monitor) => ({
-//       opacity: monitor.isDragging() ? 0.5 : 1,
-//     })
-//   });
-
-//   return (
-//     <div className="operator" ref={dragRef} style={{ opacity }}>
-//       {text}
-//     </div>
-//   )
-// }
-
 //Spot Component
 function Spot({ type, text, spot, dropHandler }) {
   const [{ canDrop, isOver }, dropRef] = useDrop({
     accept: type,
     drop: (item) => {
       dropHandler(spot, item);
-      // console.log(item);
-      // console.log(type);
     },
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
@@ -83,7 +64,7 @@ function App() {
           <Spot type='number' text={number1} spot='number1' dropHandler={dropHandler} />
           <Spot type='number' text={number2} spot='number2' dropHandler={dropHandler} />
           <Spot type='operator' text={operator} spot='operator' dropHandler={dropHandler} />
-          <div className='total'>{eval(`${number1}${operator}${number2}`)}</div>
+          <div className='total'>{(`${operator}` === '/') && (`${number1}` % `${number2}` !== 0) ? (eval(`${number1}${operator}${number2}`)).toFixed(2) : eval(`${number1}${operator}${number2}`)}</div>
         </div>
 
         <div className='calculator-buttons'>
