@@ -39,12 +39,13 @@ function Operator({ text }) {
 }
 
 //Spot Component
-function Spot({ type }) {
+function Spot({ type, text, spot, dropHandler }) {
   const [{ canDrop, isOver }, dropRef] = useDrop({
     accept: type,
     drop: (item) => {
-      console.log(item);
-      console.log(type);
+      dropHandler(spot, item);
+      // console.log(item);
+      // console.log(type);
     },
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
@@ -57,21 +58,32 @@ function Spot({ type }) {
   if (isOver) backgroundColor = '#ecd1f0';
 
   return (
-    <div className='spot' ref={dropRef} style={{ backgroundColor }}>0</div>
+    <div className='spot' ref={dropRef} style={{ backgroundColor }}>{text}</div>
   )
 }
 
 function App() {
-  return (
+  const [number1, setNumber1] = useState(2);
+  const [number2, setNumber2] = useState(3);
+  const [operator, setOperator] = useState('+');
 
+  function dropHandler(spot, item) {
+    console.log(item.text);
+    if (spot === 'number1') setNumber1(item.text);
+    if (spot === 'number2') setNumber2(item.text);
+    if (spot === 'operator') setOperator(item.text);
+    console.log(eval(`${number1}${operator}${number2}`));
+  }
+
+  return (
     <DndProvider backend={HTML5Backend}>
 
       <div className="App">
         <div className='calculator-display'>
-          <Spot type='number'>1</Spot>
-          <Spot type='number'>3</Spot>
-          <Spot type='operator'>+</Spot>
-          <div className='total'>4</div>
+          <Spot type='number' text={number1} spot='number1' dropHandler={dropHandler} />
+          <Spot type='number' text={number2} spot='number2' dropHandler={dropHandler} />
+          <Spot type='operator' text={operator} spot='operator' dropHandler={dropHandler} />
+          <div className='total'>{eval(`${number1}${operator}${number2}`)}</div>
         </div>
 
         <div className='calculator-buttons'>
