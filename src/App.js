@@ -4,10 +4,10 @@ import { useDrop } from 'react-dnd';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
-//Number Component (draggable component)
-function Number({ text }) {
+//Number and Operator Component (draggable component)
+function Button({ type, text }) {
   const [{ opacity }, dragRef] = useDrag({
-    type: 'number',
+    type,
     item: () => ({text}),
     collect: (monitor) => ({
       opacity: monitor.isDragging() ? 0.5 : 1,
@@ -15,28 +15,28 @@ function Number({ text }) {
   })
 
   return (
-    <div className="number" ref={dragRef} style={{ opacity }}>
+    <div className="button" ref={dragRef} style={{ opacity }}>
       {text}
     </div>
   )
 }
 
 //Operator Component (draggable component)
-function Operator({ text }) {
-  const [{ opacity }, dragRef] = useDrag({
-    type: 'operator',
-    item: () => ({text}),
-    collect: (monitor) => ({
-      opacity: monitor.isDragging() ? 0.5 : 1,
-    })
-  });
+// function Operator({ text }) {
+//   const [{ opacity }, dragRef] = useDrag({
+//     type: 'operator',
+//     item: () => ({text}),
+//     collect: (monitor) => ({
+//       opacity: monitor.isDragging() ? 0.5 : 1,
+//     })
+//   });
 
-  return (
-    <div className="operator" ref={dragRef} style={{ opacity }}>
-      {text}
-    </div>
-  )
-}
+//   return (
+//     <div className="operator" ref={dragRef} style={{ opacity }}>
+//       {text}
+//     </div>
+//   )
+// }
 
 //Spot Component
 function Spot({ type, text, spot, dropHandler }) {
@@ -89,13 +89,13 @@ function App() {
         <div className='calculator-buttons'>
           <div className='buttons numbers'>
             {Array(10).fill(0).map((n, i) => (
-              <Number key={i} text={i} /> 
+              <Button key={i} type='number' text={i} /> 
             ))}
           </div>
 
           <div className='buttons operators'>
             {['*', '-', '+', '/'].map((n, i) => (
-              <Operator key={i} text={n} />
+              <Button key={i} type='operator' text={n} />
             ))}
           </div>
         </div>
